@@ -65,7 +65,11 @@ export function subscribeSensors(
       const distance = Number(v.distance_cm ?? v.distance ?? 0);
       const doorClosed = Boolean(v.door_closed ?? false);
       const personNear = Boolean(v.person_near ?? false);
-      const updatedAt = Number(v.updated ?? Date.now());
+      let rawUpdated = Number(v.updated ?? Date.now());
+      if (rawUpdated > 0 && rawUpdated < 10_000_000_000) {
+        rawUpdated *= 1000;
+      }
+      const updatedAt = rawUpdated;
       onData({
         motion,
         distance,
