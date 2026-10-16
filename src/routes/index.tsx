@@ -168,13 +168,14 @@ function Dashboard() {
   // Determine if tripwires are armed based on mode & schedule
   const isArmed =
     securityMode === "ARMED_AWAY" ||
+    securityMode === "ARMED_DOOR" ||
     (securityMode === "ARMED_PERIMETER" && afterHours);
 
-  // Perimeter breach conditions
+  // Perimeter breach conditions (When in Door Only mode, motion and radar are bypassed)
   const isPerimeterBreached =
     (triggerDoor && isDoorOpen) ||
-    (triggerMotion && isMotion && securityMode !== "ARMED_PERIMETER") ||
-    (triggerPerson && isPersonNear);
+    (triggerMotion && isMotion && securityMode !== "ARMED_PERIMETER" && securityMode !== "ARMED_DOOR") ||
+    (triggerPerson && isPersonNear && securityMode !== "ARMED_DOOR");
 
   const alarmTriggered =
     manualSirenOverride ||
@@ -183,10 +184,13 @@ function Dashboard() {
   // Threat level matrix
   const threatLevel: ThreatLevel = useMemo(() => {
     if (alarmTriggered) return "BREACH";
-    if (isDoorOpen || (currentDistance > 0 && currentDistance < 50)) return "HIGH";
-    if (isMotion || (currentDistance >= 50 && currentDistance < 150)) return "ELEVATED";
+    if (isDoorOpen) return "HIGH";
+    if (securityMode !== "ARMED_DOOR") {
+      if (currentDistance > 0 && currentDistance < 50) return "HIGH";
+      if (isMotion || (currentDistance >= 50 && currentDistance < 150)) return "ELEVATED";
+    }
     return "NORMAL";
-  }, [alarmTriggered, isDoorOpen, isMotion, currentDistance]);
+  }, [alarmTriggered, isDoorOpen, isMotion, currentDistance, securityMode]);
 
   // Audio siren control
   useEffect(() => {

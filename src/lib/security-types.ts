@@ -12,6 +12,7 @@ export type EventCategory =
 export type SecurityMode =
   | "ARMED_AWAY"
   | "ARMED_PERIMETER"
+  | "ARMED_DOOR"
   | "DISARMED"
   | "MAINTENANCE";
 

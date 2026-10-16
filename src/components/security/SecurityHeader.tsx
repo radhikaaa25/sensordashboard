@@ -159,7 +159,8 @@ export function SecurityHeader({
           {(
             [
               ["ARMED_AWAY", "Armed (Away)", "hover:border-emerald-500/50"],
-              ["ARMED_PERIMETER", "Perimeter Only", "hover:border-blue-500/50"],
+              ["ARMED_PERIMETER", "Perimeter", "hover:border-blue-500/50"],
+              ["ARMED_DOOR", "Door Only", "hover:border-cyan-500/50"],
               ["DISARMED", "Disarmed", "hover:border-amber-500/50"],
               ["MAINTENANCE", "Maint.", "hover:border-purple-500/50"],
             ] as const
